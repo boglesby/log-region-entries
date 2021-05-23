@@ -1,0 +1,34 @@
+# Start locator
+start locator --name=locator
+
+# Set screen width
+set variable --name=APP_RESULT_VIEWER --value=any
+
+# Configure PDX
+configure pdx --read-serialized=false --disk-store=DEFAULT --auto-serializable-classes=example.domain.Trade
+
+# Start Server
+start server --name=server-1 --server-port=0 --statistic-archive-file=cacheserver.gfs --J=-Dgemfire.log-file=cacheserver.log --J=-Dgemfire.conserve-sockets=false
+start server --name=server-2 --server-port=0 --statistic-archive-file=cacheserver.gfs --J=-Dgemfire.log-file=cacheserver.log --J=-Dgemfire.conserve-sockets=false
+
+# Create Regions
+create region --name=PartitionedTrade --type=PARTITION_REDUNDANT --enable-statistics=true
+create region --name=PartitionedOverflowTrade --type=PARTITION_OVERFLOW --enable-statistics=true
+create region --name=PartitionedPersistentTrade --type=PARTITION_PERSISTENT --enable-statistics=true
+create region --name=PartitionedLRUTrade --type=PARTITION_HEAP_LRU --enable-statistics=true
+create region --name=PartitionedPersistentOverflowTrade --type=PARTITION_PERSISTENT_OVERFLOW --enable-statistics=true
+
+create region --name=ReplicatedTrade --type=REPLICATE --enable-statistics=true
+create region --name=ReplicatedOverflowTrade --type=REPLICATE_OVERFLOW --enable-statistics=true
+create region --name=ReplicatedPersistentTrade --type=REPLICATE_PERSISTENT --enable-statistics=true
+create region --name=ReplicatedLRUTrade --type=REPLICATE_HEAP_LRU --enable-statistics=true
+create region --name=ReplicatedPersistentOverflowTrade --type=REPLICATE_PERSISTENT_OVERFLOW --enable-statistics=true
+
+# List Regions
+list regions
+
+# Deploy Functions
+deploy --jar=server/build/libs/server-0.0.1-SNAPSHOT.jar
+
+# List Functions
+list functions

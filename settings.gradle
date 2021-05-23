@@ -1,0 +1,2 @@
+rootProject.name = 'log-region-entries'
+include 'client','server'
